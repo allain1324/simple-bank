@@ -7,10 +7,9 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
-const createAccount = `-- name: CreateAccount :execresult
+const createAccount = `-- name: CreateAccount :one
 INSERT INTO accounts (
   owner,
   balance,
@@ -26,8 +25,17 @@ type CreateAccountParams struct {
 	Currency string
 }
 
-func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (sql.Result, error) {
-	return q.db.ExecContext(ctx, createAccount, arg.Owner, arg.Balance, arg.Currency)
+func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (Account, error) {
+	row := q.db.QueryRowContext(ctx, createAccount, arg.Owner, arg.Balance, arg.Currency)
+	var i Account
+	err := row.Scan(
+		&i.ID,
+		&i.Owner,
+		&i.Balance,
+		&i.Currency,
+		&i.CreatedAt,
+	)
+	return i, err
 }
 
 const deleteAccount = `-- name: DeleteAccount :exec
