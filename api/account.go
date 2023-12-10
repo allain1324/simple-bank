@@ -3,7 +3,6 @@ package api
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"net/http"
 
 	db "github.com/allain1324/simplebank/db/sqlc"
@@ -33,7 +32,11 @@ func (server *Server) createAccount(ctx *gin.Context) {
 	if err != nil {
 
 		if pqErr, ok := err.(*pq.Error); ok {
-			log.Println(pqErr.Code.Name())
+			switch pqErr.Code.Name() {
+			case "foreign_key_violation", "unique_violation":
+				ctx.JSON(http.StatusForbidden, errorResponse(err))
+				return
+			}
 		}
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
