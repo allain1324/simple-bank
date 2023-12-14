@@ -51,7 +51,7 @@ func (server *Server) validAccount(ctx *gin.Context, accountID int64, currency s
 	account, err := server.store.GetAccount(ctx, accountID)
 
 	if err != nil {
-		if err != sql.ErrNoRows {
+		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return false
 		}
