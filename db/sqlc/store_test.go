@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	"fmt"
+	// "fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -13,7 +13,7 @@ func TestTransferTx(t *testing.T) {
 
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
-	fmt.Println(">> before ", account1.Balance, account2.Balance)
+	// fmt.Println(">> before ", account1.Balance, account2.Balance)
 
 	// run n concurrent transfer transactions
 	n := 5
@@ -85,14 +85,14 @@ func TestTransferTx(t *testing.T) {
 		require.Equal(t, account2.ID, toAccount.ID)
 
 		// check accounts balance
-		fmt.Printf("tx %d:", i+1)
-		fmt.Println()
-		fmt.Println("account1", account1)
-		fmt.Println("account2", account2)
-		fmt.Println(">> tx:", fromAccount, toAccount)
+		// fmt.Printf("tx %d:", i+1)
+		// fmt.Println()
+		// fmt.Println("account1", account1)
+		// fmt.Println("account2", account2)
+		// fmt.Println(">> tx:", fromAccount, toAccount)
 		diff1 := account1.Balance - fromAccount.Balance
 		diff2 := toAccount.Balance - account2.Balance
-		fmt.Println(">> diff1:", diff1, ">> diff2:", diff2)
+		// fmt.Println(">> diff1:", diff1, ">> diff2:", diff2)
 		require.Equal(t, diff1, diff2)
 		require.True(t, diff1 > 0)
 		require.True(t, diff1%amount == 0) // 1 * amount, 2 * amount, 3 * amount, ...., n * amount
@@ -109,7 +109,7 @@ func TestTransferTx(t *testing.T) {
 	updateAccount2, err := testQueries.GetAccount(context.Background(), account2.ID)
 	require.NoError(t, err)
 
-	fmt.Println(">> after", updateAccount1.Balance, updateAccount2.Balance)
+	// fmt.Println(">> after", updateAccount1.Balance, updateAccount2.Balance)
 	require.Equal(t, account1.Balance-int64(n)*amount, updateAccount1.Balance)
 	require.Equal(t, account2.Balance+int64(n)*amount, updateAccount2.Balance)
 }
@@ -119,7 +119,7 @@ func TestTransferTxDeadlock(t *testing.T) {
 
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
-	fmt.Println(">> before ", account1.Balance, account2.Balance)
+	// fmt.Println(">> before ", account1.Balance, account2.Balance)
 
 	// run n concurrent transfer transactions
 	n := 10
@@ -160,7 +160,7 @@ func TestTransferTxDeadlock(t *testing.T) {
 	updateAccount2, err := testQueries.GetAccount(context.Background(), account2.ID)
 	require.NoError(t, err)
 
-	fmt.Println(">> after", updateAccount1.Balance, updateAccount2.Balance)
+	// fmt.Println(">> after", updateAccount1.Balance, updateAccount2.Balance)
 	require.Equal(t, account1.Balance, updateAccount1.Balance)
 	require.Equal(t, account2.Balance, updateAccount2.Balance)
 }
