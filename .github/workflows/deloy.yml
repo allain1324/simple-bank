@@ -12,6 +12,10 @@ jobs:
     name: Build image
     runs-on: ubuntu-latest
 
+    permissions:
+      issues: write
+      pull-requests: write
+
     steps:
       - name: Check out code
         uses: actions/checkout@v2
