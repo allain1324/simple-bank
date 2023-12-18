@@ -15,6 +15,7 @@ jobs:
   build:
     name: Build image
     runs-on: ubuntu-latest
+    environment: production
 
     permissions:
       issues: write
